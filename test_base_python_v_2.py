@@ -1,13 +1,19 @@
 from datetime import time
 
+
 def test_dark_theme_by_time():
     """
     Протестируйте правильность переключения темной темы на сайте в зависимости от времени
     """
     current_time = time(hour=23)
     # TODO переключите темную тему в зависимости от времени суток (с 22 до 6 часов утра - ночь)
-    is_dark_theme = None
+    if current_time.hour >= 22 or current_time.hour <= 6:
+        is_dark_theme = True
+    else:
+        is_dark_theme = False
+
     assert is_dark_theme is True
+
 
 def test_dark_theme_by_time_and_user_choice():
     """
@@ -19,10 +25,22 @@ def test_dark_theme_by_time_and_user_choice():
     """
     current_time = time(hour=16)
     dark_theme_enabled_by_user = True
+
     # TODO переключите темную тему в зависимости от времени суток,
     #  но учтите что темная тема может быть включена вручную
-    is_dark_theme = None
+
+    if current_time.hour >= 22 or current_time.hour <= 6:
+        if dark_theme_enabled_by_user:
+            is_dark_theme = True
+        else:
+            is_dark_theme = False
+    elif dark_theme_enabled_by_user:
+        is_dark_theme = True
+    else:
+        is_dark_theme = False
+
     assert is_dark_theme is True
+
 
 def test_find_suitable_user():
     """
@@ -37,13 +55,24 @@ def test_find_suitable_user():
     ]
     # TODO найдите пользователя с именем "Olga"
     suitable_users = None
+    for user in users:
+        if user['name'] == 'Olga':
+            suitable_users = user
+            break
+
     assert suitable_users == {"name": "Olga", "age": 45}
+
     # TODO найдите всех пользователей младше 20 лет
-    suitable_users = None
+    suitable_users = []
+    for user in users:
+        if user['age'] < 20:
+            suitable_users.append(user)
+
     assert suitable_users == [
         {"name": "Stanislav", "age": 15},
         {"name": "Maria", "age": 18},
     ]
+
 
 # Сделайте функцию, которая будет печатать
 # читаемое имя переданной ей функции и значений аргументов.
@@ -60,14 +89,23 @@ def test_readable_function():
     go_to_companyname_homepage(page_url="https://companyname.com")
     find_registration_button_on_login_page(page_url="https://companyname.com/login", button_text="Register")
 
+
+def read_function(func, *args):
+    text = func.__name__.replace('_', ' ').title()
+    args_text = ', '.join(str(arg) for arg in args)
+    return f'{text} [{args_text}]'
+
+
 def open_browser(browser_name):
-    actual_result = None
+    actual_result = read_function(open_browser, browser_name)
     assert actual_result == "Open Browser [Chrome]"
 
+
 def go_to_companyname_homepage(page_url):
-    actual_result = None
+    actual_result = read_function(go_to_companyname_homepage, page_url)
     assert actual_result == "Go To Companyname Homepage [https://companyname.com]"
 
+
 def find_registration_button_on_login_page(page_url, button_text):
-    actual_result = None
+    actual_result = read_function(find_registration_button_on_login_page, page_url, button_text)
     assert actual_result == "Find Registration Button On Login Page [https://companyname.com/login, Register]"
