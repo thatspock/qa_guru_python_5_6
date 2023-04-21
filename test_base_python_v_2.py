@@ -93,6 +93,7 @@ def test_readable_function():
 def read_function(func, *args):
     text = func.__name__.replace('_', ' ').title()
     args_text = ', '.join(str(arg) for arg in args)
+    print(f'\n{text} [{args_text}]')
     return f'{text} [{args_text}]'
 
 
